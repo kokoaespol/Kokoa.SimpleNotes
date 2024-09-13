@@ -1,6 +1,5 @@
 package io.github.alicarpio.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
