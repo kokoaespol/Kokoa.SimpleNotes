@@ -1,6 +1,6 @@
-package io.github.alicarpio.repositories;
+package alicarpio.repositories;
 
-import io.github.alicarpio.domain.User;
+import alicarpio.entities.User;
 
 public interface UserRepository {
     User findUserByEmail(String email);
