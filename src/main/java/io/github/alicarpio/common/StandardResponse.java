@@ -1,7 +1,7 @@
 package io.github.alicarpio.common;
 
 import com.google.gson.JsonElement;
-import io.github.alicarpio.enums.StatusResponse;
+import io.github.alicarpio.domain.enums.StatusResponse;
 import lombok.Getter;
 import lombok.Setter;
 

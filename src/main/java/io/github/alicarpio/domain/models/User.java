@@ -1,4 +1,4 @@
-package io.github.alicarpio.entities;
+package io.github.alicarpio.domain.models;
 
 import lombok.Getter;
 import lombok.ToString;

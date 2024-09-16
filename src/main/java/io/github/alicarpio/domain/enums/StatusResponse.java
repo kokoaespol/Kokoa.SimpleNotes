@@ -1,4 +1,4 @@
-package io.github.alicarpio.enums;
+package io.github.alicarpio.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
