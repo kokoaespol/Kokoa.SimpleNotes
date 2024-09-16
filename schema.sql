@@ -38,7 +38,7 @@ CREATE TABLE NOTE_TAG (
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
+    NEW.updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil';
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -53,3 +53,6 @@ CREATE TRIGGER note_update
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
+
+INSERT INTO USER_NT (name, surname, email, password)
+VALUES ('alina', 'carpio', 'ali@gmail.com', '12345');
