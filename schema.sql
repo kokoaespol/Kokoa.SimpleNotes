@@ -1,5 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+
 CREATE TABLE USER_NT (
-    user_id SERIAL PRIMARY KEY,
+    user_id UUID PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
     surname VARCHAR(150) NOT NULL,
     email VARCHAR(250) NOT NULL,
@@ -14,7 +17,7 @@ CREATE TABLE NOTE (
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER,
+    user_id UUID,
     FOREIGN KEY (user_id) REFERENCES USER_NT(user_id)
 );
 
@@ -22,7 +25,7 @@ CREATE TABLE TAG (
     tag_id SERIAL PRIMARY KEY,
     name VARCHAR(50),
     color VARCHAR(10),
-    user_id INTEGER,
+    user_id UUID,
     FOREIGN KEY (user_id) REFERENCES USER_NT(user_id)
 );
 
@@ -38,7 +41,7 @@ CREATE TABLE NOTE_TAG (
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'America/Guayaquil';
+    NEW.updated_at = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -52,7 +55,3 @@ CREATE TRIGGER note_update
     BEFORE UPDATE ON NOTE
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
-
-
-INSERT INTO USER_NT (name, surname, email, password)
-VALUES ('alina', 'carpio', 'ali@gmail.com', '12345');

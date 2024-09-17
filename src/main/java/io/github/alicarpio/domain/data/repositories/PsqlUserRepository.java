@@ -26,10 +26,11 @@ public class PsqlUserRepository implements UserRepository {
                 session.persist(user);
                 transaction.commit();
             }catch (Exception ex){
-                if (transaction == null){
-                    ex.printStackTrace();
+                if (transaction != null) {
+                    transaction.rollback();
                 }
-                transaction.rollback();
+                ex.printStackTrace();
+                throw new RuntimeException("Failed to register user", ex);
             }
             }
 

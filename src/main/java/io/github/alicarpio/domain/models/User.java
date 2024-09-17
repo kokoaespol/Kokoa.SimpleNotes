@@ -15,7 +15,7 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
     private UUID id;
 
@@ -28,7 +28,6 @@ public class User {
     private String password;
 
     public User(String name, String surname, String email, String password) {
-        id = UUID.randomUUID();
         this.name = name;
         this.surname = surname;
         this.email = email;
