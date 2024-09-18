@@ -35,6 +35,10 @@ public class UserRoutes {
 
     public void setupRoutes(){
         post("/users", (request, response) ->{
+            if (request.body() == null || request.body().isEmpty()) {
+                halt(400, "Request body cannot be empty");
+            }
+
             try {
                 var registrationReq = gson.fromJson(request.body(), UserRegistrationRequest.class);
                 userRegistrationUseCase.invoke(
@@ -53,6 +57,10 @@ public class UserRoutes {
         });
 
         post("/login", (req, res) -> {
+            if (req.body() == null || req.body().isEmpty()) {
+                halt(400, "Request body cannot be empty");
+            }
+
             try {
                 LoginRequest loginRequest = gson.fromJson(req.body(), LoginRequest.class);
                 String token = userLogInUseCase.invoke(loginRequest.getEmail(), loginRequest.getPassword());

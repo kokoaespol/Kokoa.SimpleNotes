@@ -6,6 +6,7 @@ build/
 
 ### IntelliJ IDEA ###
 .idea/
+pgdta/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -16,8 +17,7 @@ build/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-./pgdta/
-pgdta
+
 
 ### Eclipse ###
 .apt_generated
