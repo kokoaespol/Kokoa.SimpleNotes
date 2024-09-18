@@ -30,17 +30,27 @@ dependencies {
     //GSON
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 
+    // Spark
     implementation 'com.sparkjava:spark-core:2.9.4'
 
+    // Hibernate orm
     implementation 'org.hibernate:hibernate-core:6.3.0.Final'
 
+    //Hibernate Validator
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.glassfish:javax.el:3.0.0'
+
+    // psql
     implementation 'org.postgresql:postgresql:42.5.0'
 
+    // Log4j2 logging
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
-
-    // Optional: SLF4J to Log4j2 bridge (if using SLF4J)
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+
+    implementation 'jakarta.el:jakarta.el-api:4.0.0'
+
 
 }
 

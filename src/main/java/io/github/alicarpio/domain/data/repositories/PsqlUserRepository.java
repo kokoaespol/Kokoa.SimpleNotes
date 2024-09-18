@@ -6,16 +6,9 @@ import io.github.alicarpio.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class PsqlUserRepository implements UserRepository {
-    @Override
-    public User findUserByEmail(String email) {
-        try (Session session = HibernateUtil.getSession()){
-           return session.createQuery("FROM User WHERE email = :email",User.class)
-                   .setParameter("email", email)
-                   .uniqueResult();
-        }
+import java.util.UUID;
 
-    }
+public class PsqlUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
@@ -32,7 +25,18 @@ public class PsqlUserRepository implements UserRepository {
                 ex.printStackTrace();
                 throw new RuntimeException("Failed to register user", ex);
             }
-            }
+        }
+    }
+    @Override
+    public User findUserByEmail(String email) {
+        try (Session session = HibernateUtil.getSession()){
+           return session.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                   .setParameter("email", email.trim().toLowerCase())
+                   .getSingleResult();
+        } catch (Exception ex){
+            System.out.println("Error finding user by email");
+            return null;
+        }
 
     }
 }

@@ -1,9 +1,13 @@
 package io.github.alicarpio.routes;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import io.github.alicarpio.common.StandardResponse;
 import io.github.alicarpio.domain.enums.StatusResponse;
+import io.github.alicarpio.domain.use_cases.UserLogInUseCase;
 import io.github.alicarpio.domain.use_cases.UserRegistrationUseCase;
+import io.github.alicarpio.domain.validations.exceptions.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +19,17 @@ import static spark.Spark.*;
 public class UserRoutes {
     private static final Logger logger = LoggerFactory.getLogger(UserRoutes.class);
     private final UserRegistrationUseCase userRegistrationUseCase;
+    private final UserLogInUseCase userLogInUseCase;
     private final Gson gson;
 
-    public UserRoutes(UserRegistrationUseCase userRegistrationUseCase) {
+    public UserRoutes
+            (
+                UserRegistrationUseCase userRegistrationUseCase,
+                UserLogInUseCase userLogInUseCase
+    )
+    {
         this.userRegistrationUseCase = userRegistrationUseCase;
+        this.userLogInUseCase = userLogInUseCase;
         this.gson = new Gson();
     }
 
@@ -32,6 +43,7 @@ public class UserRoutes {
                         registrationReq.getEmail(),
                         registrationReq.getPassword()
                 );
+                response.status(201);
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "User created successfully"));
             }catch (Exception e){
                 logger.error("Error occurred while creating user", e);
@@ -39,6 +51,28 @@ public class UserRoutes {
                 return gson.toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
             }
         });
+
+        post("/login", (req, res) -> {
+            try {
+                LoginRequest loginRequest = gson.fromJson(req.body(), LoginRequest.class);
+                String token = userLogInUseCase.invoke(loginRequest.getEmail(), loginRequest.getPassword());
+                JsonElement tokenJson = new JsonPrimitive(token);
+                res.status(200);
+                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS,tokenJson));
+            } catch (ValidationException ex) {
+                logger.error("An error ocurred while logging in");
+                res.status(400);
+                return gson.toJson(new StandardResponse(StatusResponse.ERROR, ex.getMessage()));
+            }
+        });
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    class LoginRequest {
+        private String email;
+        private String password;
     }
 
     @Getter
