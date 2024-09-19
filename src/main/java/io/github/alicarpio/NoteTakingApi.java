@@ -26,7 +26,7 @@ public class NoteTakingApi {
         userRoutes.setupRoutes();
 
         Spark.path("/api", () -> {
-
+            
         });
 
         Spark.init();
