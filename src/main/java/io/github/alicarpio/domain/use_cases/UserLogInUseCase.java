@@ -27,8 +27,8 @@ public class UserLogInUseCase {
         logger.info("User: {}", user);
 
         if (user == null) {
-            logger.error("User not found");
-            throw new UserNotFoundException(user.getName());
+            logger.error("User not found {}", email);
+            throw new UserNotFoundException(email);
         }
 
         if(!PasswordUtil.checkPassword(password,user.getPassword())){

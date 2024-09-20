@@ -25,7 +25,7 @@ public class Note {
     @Column(nullable = false)
     private String content;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id"),

@@ -2,6 +2,7 @@ package io.github.alicarpio.domain.use_cases;
 
 import io.github.alicarpio.domain.models.User;
 import io.github.alicarpio.domain.validations.Validator;
+import io.github.alicarpio.domain.validations.exceptions.FailedToRegisterException;
 import io.github.alicarpio.repositories.UserRepository;
 import io.github.alicarpio.utils.PasswordUtil;
 
@@ -17,7 +18,7 @@ public class UserRegistrationUseCase  {
     }
 
     //TO-DO: Implement validations
-    public void invoke(String name, String surname, String email, String password){
+    public void invoke(String name, String surname, String email, String password) throws FailedToRegisterException{
         String hashPassword = PasswordUtil.hashPassword(password);
         User user = new User(name,surname, email, hashPassword);
         users.save(user);

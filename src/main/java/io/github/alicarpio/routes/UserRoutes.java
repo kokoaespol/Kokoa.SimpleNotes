@@ -47,6 +47,7 @@ public class UserRoutes {
                         registrationReq.getEmail(),
                         registrationReq.getPassword()
                 );
+                logger.info("User created successfully");
                 response.status(201);
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "User created successfully"));
             }catch (Exception e){
@@ -66,6 +67,7 @@ public class UserRoutes {
                 String token = userLogInUseCase.invoke(loginRequest.getEmail(), loginRequest.getPassword());
                 JsonElement tokenJson = new JsonPrimitive(token);
                 res.status(200);
+                logger.info("Token created successfully");
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS,tokenJson));
             } catch (ValidationException ex) {
                 logger.error("An error ocurred while logging in");
