@@ -24,15 +24,12 @@ public class UserLogInUseCase {
     public String invoke(String email, String password) throws ValidationException {
         User user = users.findUserByEmail(email);
         logger.info("Attempting login for email: {}", email);
-        logger.info("User: {}", user);
 
         if (user == null) {
-            logger.error("User not found {}", email);
             throw new UserNotFoundException(email);
         }
 
         if(!PasswordUtil.checkPassword(password,user.getPassword())){
-            logger.error("Password doesn't match");
             throw new InvalidCredentialsException();
         }
 
