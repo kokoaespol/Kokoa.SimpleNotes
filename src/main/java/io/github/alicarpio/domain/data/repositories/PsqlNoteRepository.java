@@ -2,6 +2,7 @@ package io.github.alicarpio.domain.data.repositories;
 
 import io.github.alicarpio.domain.models.Note;
 import io.github.alicarpio.domain.validations.exceptions.FailedToFetchException;
+import io.github.alicarpio.domain.validations.exceptions.FailedToFindEntityException;
 import io.github.alicarpio.domain.validations.exceptions.FailedToRegisterException;
 import io.github.alicarpio.repositories.NoteRepository;
 import io.github.alicarpio.routes.UserRoutes;
@@ -25,7 +26,7 @@ public class PsqlNoteRepository implements NoteRepository {
                 transaction = session.beginTransaction();
                 session.persist(note);
                 transaction.commit();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 if (transaction != null) {
                     transaction.rollback();
                 }
@@ -41,11 +42,11 @@ public class PsqlNoteRepository implements NoteRepository {
     }
 
     @Override
-    public Boolean delete(int note_id) {
+    public Boolean delete(int id) {
         try (Session session = HibernateUtil.getSession()) {
             Transaction transaction = session.beginTransaction();
-            try{
-                Note note = session.get(Note.class, note_id);
+            try {
+                Note note = session.get(Note.class, id);
                 if (note != null) {
                     session.remove(note);
                     transaction.commit();
@@ -53,7 +54,7 @@ public class PsqlNoteRepository implements NoteRepository {
                 } else {
                     return false;
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 transaction.rollback();
                 logger.error("An error occurred while deleting");
                 return false;
@@ -62,15 +63,30 @@ public class PsqlNoteRepository implements NoteRepository {
     }
 
     @Override
+    public Note findById(int id) throws FailedToFindEntityException {
+        try (Session session = HibernateUtil.getSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT n FROM Note n " +
+                                    "LEFT JOIN FETCH n.tags " +
+                                    "WHERE n.id = :id", Note.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (Exception ex) {
+            logger.error("Error fetching note:");
+            throw new FailedToFindEntityException("note");
+        }
+    }
+
+    @Override
     public List<Note> getAllNotes(UUID user_id) throws FailedToFetchException {
         try (Session session = HibernateUtil.getSession()) {
             return session.createQuery(
-                    "SELECT DISTINCT n FROM Note n " +
-                            "LEFT JOIN FETCH n.tags " +
-                            "WHERE n.user.id = :user_id", Note.class)
+                            "SELECT DISTINCT n FROM Note n " +
+                                    "LEFT JOIN FETCH n.tags " +
+                                    "WHERE n.user.id = :user_id", Note.class)
                     .setParameter("user_id", user_id)
                     .getResultList();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("Error fetching notes:");
             throw new FailedToFetchException("notes");
         }

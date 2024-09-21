@@ -6,6 +6,7 @@ import io.github.alicarpio.domain.enums.StatusResponse;
 import io.github.alicarpio.domain.models.Note;
 import io.github.alicarpio.domain.models.Tag;
 import io.github.alicarpio.domain.use_cases.CreateNoteUseCase;
+import io.github.alicarpio.domain.use_cases.DeleteNoteUseCase;
 import io.github.alicarpio.domain.use_cases.ViewAllNotesUseCase;
 import io.github.alicarpio.utils.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -23,13 +24,14 @@ public class NoteRoutes {
     private static final Logger logger = LoggerFactory.getLogger(UserRoutes.class);
     private final Gson gson;
     private final CreateNoteUseCase createNoteUseCase;
-
     private final ViewAllNotesUseCase viewAllNotesUseCase;
+    private final DeleteNoteUseCase deleteNoteUseCase;
 
 
-    public NoteRoutes(CreateNoteUseCase createNoteUseCase, ViewAllNotesUseCase viewAllNotesUseCase) {
+    public NoteRoutes(CreateNoteUseCase createNoteUseCase, ViewAllNotesUseCase viewAllNotesUseCase, DeleteNoteUseCase deleteNoteUseCase) {
         this.createNoteUseCase = createNoteUseCase;
         this.viewAllNotesUseCase = viewAllNotesUseCase;
+        this.deleteNoteUseCase = deleteNoteUseCase;
         this.gson = new Gson();
     }
 
@@ -79,6 +81,26 @@ public class NoteRoutes {
                 return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Error retrieving notes"));
             }
         }));
+
+        delete("/note/:id", (((request, response) -> {
+            int noteId = Integer.parseInt(request.params(":id"));
+
+            try {
+                boolean deleted = deleteNoteUseCase.invoke(noteId);
+
+                if (!deleted) {
+                    response.status(400);
+                    return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Failed to delete note"));
+                }
+
+                response.status(200);
+                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Note deleted successfully"));
+
+            } catch (Exception ex) {
+                response.status(500);
+                return gson.toJson(new StandardResponse(StatusResponse.ERROR, "An error occurred while deleting the note"));
+            }
+        })));
     }
 
 
