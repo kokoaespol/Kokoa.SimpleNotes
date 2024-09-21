@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @ToString
@@ -24,7 +24,7 @@ public class Tag {
     private String color;
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Note> notes = new HashSet<>();
+    private List<Note> notes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

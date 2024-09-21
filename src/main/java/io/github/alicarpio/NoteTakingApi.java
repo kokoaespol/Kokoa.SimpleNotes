@@ -5,6 +5,7 @@ import io.github.alicarpio.domain.data.repositories.PsqlUserRepository;
 import io.github.alicarpio.domain.use_cases.CreateNoteUseCase;
 import io.github.alicarpio.domain.use_cases.UserLogInUseCase;
 import io.github.alicarpio.domain.use_cases.UserRegistrationUseCase;
+import io.github.alicarpio.domain.use_cases.ViewAllNotesUseCase;
 import io.github.alicarpio.domain.validations.UserValidator;
 import io.github.alicarpio.repositories.NoteRepository;
 import io.github.alicarpio.repositories.UserRepository;
@@ -25,9 +26,10 @@ public class NoteTakingApi {
         UserRegistrationUseCase userRegistrationUseCase = new UserRegistrationUseCase(userRepository, new UserValidator());
         UserLogInUseCase userLogInUseCase = new UserLogInUseCase(userRepository);
         CreateNoteUseCase createNoteUseCase = new CreateNoteUseCase(noteRepository, userRepository);
+        ViewAllNotesUseCase viewAllNotesUseCase = new ViewAllNotesUseCase(noteRepository,userRepository);
 
         UserRoutes userRoutes = new UserRoutes(userRegistrationUseCase, userLogInUseCase);
-        NoteRoutes noteRoutes = new NoteRoutes(createNoteUseCase);
+        NoteRoutes noteRoutes = new NoteRoutes(createNoteUseCase,viewAllNotesUseCase);
 
         JwtMiddleware.setupJwtAuth();
 

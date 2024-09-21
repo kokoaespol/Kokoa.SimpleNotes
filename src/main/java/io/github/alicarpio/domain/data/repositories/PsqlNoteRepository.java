@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PsqlNoteRepository implements NoteRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRoutes.class);
@@ -61,9 +62,13 @@ public class PsqlNoteRepository implements NoteRepository {
     }
 
     @Override
-    public List<Note> getAllNotes() throws FailedToFetchException {
+    public List<Note> getAllNotes(UUID user_id) throws FailedToFetchException {
         try (Session session = HibernateUtil.getSession()) {
-            return session.createQuery("SELECT n FROM Note n", Note.class)
+            return session.createQuery(
+                    "SELECT DISTINCT n FROM Note n " +
+                            "LEFT JOIN FETCH n.tags " +
+                            "WHERE n.user.id = :user_id", Note.class)
+                    .setParameter("user_id", user_id)
                     .getResultList();
         }catch (Exception ex){
             logger.error("Error fetching notes:");

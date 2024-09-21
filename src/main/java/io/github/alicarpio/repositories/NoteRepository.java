@@ -5,6 +5,7 @@ import io.github.alicarpio.domain.validations.exceptions.FailedToFetchException;
 import io.github.alicarpio.domain.validations.exceptions.FailedToRegisterException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface NoteRepository {
     void save(Note note) throws FailedToRegisterException;
@@ -13,7 +14,7 @@ public interface NoteRepository {
 
     Boolean delete(int note_id);
 
-    List<Note> getAllNotes() throws FailedToFetchException;
+    List<Note> getAllNotes(UUID user_id) throws FailedToFetchException;
 
     List<Note> getNotesByTag(int tag_id);
 }
