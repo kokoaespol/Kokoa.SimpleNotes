@@ -3,12 +3,14 @@ package io.github.alicarpio.domain.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @Entity
@@ -20,6 +22,7 @@ public class Note {
     @Column(name = "note_id")
     private int id;
 
+    @Column
     private String title;
 
     @Column(nullable = false)

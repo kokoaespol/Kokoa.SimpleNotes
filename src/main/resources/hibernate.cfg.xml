@@ -22,6 +22,8 @@
 
     <!-- Specify the mapping files -->
     <mapping class="io.github.alicarpio.domain.models.User"/>
+    <mapping class="io.github.alicarpio.domain.models.Note"/>
+    <mapping class="io.github.alicarpio.domain.models.Tag"/>
 
     <!-- <mapping resource="com/example/model/Employee.hbm.xml"/> -->
 </session-factory>
