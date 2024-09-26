@@ -9,6 +9,7 @@ import io.github.alicarpio.repositories.UserRepository;
 import io.github.alicarpio.routes.JwtMiddleware;
 import io.github.alicarpio.routes.NoteRoutes;
 import io.github.alicarpio.routes.UserRoutes;
+import io.github.alicarpio.utils.CorsFilter;
 import io.github.alicarpio.utils.HibernateUtil;
 import spark.Spark;
 
@@ -28,6 +29,9 @@ public class NoteTakingApi {
 
         UserRoutes userRoutes = new UserRoutes(userRegistrationUseCase, userLogInUseCase);
         NoteRoutes noteRoutes = new NoteRoutes(createNoteUseCase, viewAllNotesUseCase, deleteNoteUseCase);
+
+        CorsFilter corsFilter = new CorsFilter();
+        corsFilter.apply();
 
         JwtMiddleware.setupJwtAuth();
 
