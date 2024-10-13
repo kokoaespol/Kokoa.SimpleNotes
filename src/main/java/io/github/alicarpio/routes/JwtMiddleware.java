@@ -16,6 +16,10 @@ public class JwtMiddleware {
         before("api/auth/*", ((request, response) -> {
             logger.debug("Processing request for path: " + request.pathInfo());
 
+            if (request.pathInfo().equals("/api/Auth/refresh") || request.pathInfo().equals("/api/Auth/login")) {
+                return;
+            }
+
             if (request.requestMethod().equalsIgnoreCase("OPTIONS")) {
                 logger.debug("Allowing OPTIONS request to pass through");
                 return;

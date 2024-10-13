@@ -26,8 +26,9 @@ public class NoteTakingApi {
         CreateNoteUseCase createNoteUseCase = new CreateNoteUseCase(noteRepository, userRepository);
         ViewAllNotesUseCase viewAllNotesUseCase = new ViewAllNotesUseCase(noteRepository, userRepository);
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCase(noteRepository);
+        RefreshTokenUseCase refreshTokenUseCase = new RefreshTokenUseCase(userRepository);
 
-        UserRoutes userRoutes = new UserRoutes(userRegistrationUseCase, userLogInUseCase);
+        UserRoutes userRoutes = new UserRoutes(userRegistrationUseCase, userLogInUseCase, refreshTokenUseCase);
         NoteRoutes noteRoutes = new NoteRoutes(createNoteUseCase, viewAllNotesUseCase, deleteNoteUseCase);
 
         CorsFilter corsFilter = new CorsFilter();
@@ -37,7 +38,7 @@ public class NoteTakingApi {
 
         userRoutes.setupRoutes();
 
-        Spark.path("/api", () -> {
+        Spark.path("/api/auth", () -> {
             noteRoutes.setupRoutes();
         });
 
